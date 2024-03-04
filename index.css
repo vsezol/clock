@@ -1,0 +1,211 @@
+:root {
+  --shadow-1: rgba(10, 10, 10, 0.45);
+  --shadow-2: rgba(20, 20, 20, 0.4);
+  --shadow-3: rgba(20, 20, 20, 0.4);
+
+  --clock-diameter: 50vh;
+  --wrapper-width: calc(var(--clock-diameter) * 0.2 / 2);
+
+  --clock-point-width: 3px;
+  --clock-point-height: calc(var(--wrapper-width) * 0.5);
+  --clock-point-margin: calc(
+    (var(--wrapper-width) - var(--clock-point-height)) / 2
+  );
+  --clock-point-small-width: 1px;
+  --clock-point-small-height: calc(var(--wrapper-width) * 0.25);
+  --bg: #282828;
+
+  --arrow-second-size: 5px;
+  --arrow-minute-size: 8px;
+  --arrow-hour-size: 10px;
+
+  --center-top-size: 15px;
+
+  --accent-color: rgb(13, 197, 31);
+
+  --arrow-minute-color: rgb(139, 161, 139);
+  --arrow-hour-color: rgb(139, 161, 139);
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    --clock-diameter: 75vw;
+    --wrapper-width: calc(var(--clock-diameter) * 0.2 / 2);
+    --clock-point-width: 2px;
+
+    --arrow-second-size: 4px;
+    --arrow-minute-size: 6px;
+    --arrow-hour-size: 8px;
+
+    --center-top-size: 12px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.clock {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--clock-diameter);
+  height: var(--clock-diameter);
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: -5px -5px 9px var(--shadow-1), 3px 3px 2px var(--shadow-3);
+}
+.clock::after {
+  content: "";
+  position: absolute;
+  height: 80%;
+  width: 80%;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: inset -5px -5px 9px var(--shadow-1),
+    inset 5px 5px 9px var(--shadow-2);
+}
+
+.center {
+  position: absolute;
+  z-index: 4;
+  border-radius: 100%;
+  background-color: white;
+}
+
+.center_second {
+  width: calc(var(--arrow-second-size) * 2);
+  height: calc(var(--arrow-second-size) * 2);
+  aspect-ratio: 1;
+  background-color: var(--accent-color);
+}
+
+.center_minute {
+  width: calc(var(--arrow-minute-size) * 2);
+  height: calc(var(--arrow-minute-size) * 2);
+  aspect-ratio: 1;
+  background-color: var(--arrow-minute-color);
+}
+
+.center_hour {
+  width: calc(var(--arrow-hour-size) * 2);
+  height: calc(var(--arrow-hour-size) * 2);
+  aspect-ratio: 1;
+  background-color: var(--arrow-hour-color);
+}
+
+.center-top {
+  position: absolute;
+  width: var(--center-top-size);
+  height: var(--center-top-size);
+  aspect-ratio: 1;
+  border-radius: 100%;
+  z-index: 10;
+  background: var(--bg);
+
+  box-shadow: -1px -1px 1px var(--shadow-1), 1px 1px 1px var(--shadow-3);
+}
+
+.center-top::after {
+  position: absolute;
+  width: var(--center-top-size);
+  height: var(--center-top-size);
+  aspect-ratio: 1;
+  border-radius: 100%;
+  z-index: 10;
+  background: var(--bg);
+
+  box-shadow: inset -1px -1px 1px var(--shadow-1),
+    inset 1px 1px 1px var(--shadow-2);
+}
+
+.arrow {
+  --start-angle: 0deg;
+  position: absolute;
+  height: var(--clock-diameter);
+  display: flex;
+  justify-content: center;
+  transition: 0.2s all ease-in-out;
+}
+
+.arrow__inner {
+  position: absolute;
+  align-self: flex-end;
+
+  transform: rotateX(180deg);
+}
+
+.arrow_second {
+  transform: rotateZ(calc(var(--start-angle) + 180deg));
+  z-index: 5;
+}
+
+.arrow_second > .arrow__inner {
+  --arrow-size: calc(var(--clock-diameter) / 2 - var(--wrapper-width));
+
+  border-left: var(--arrow-second-size) solid transparent;
+  border-right: var(--arrow-second-size) solid transparent;
+  margin-bottom: var(--wrapper-width);
+  border-bottom: var(--arrow-size) solid var(--accent-color);
+}
+
+.arrow_minute {
+  transform: rotateZ(calc(var(--start-angle) + 180deg));
+  z-index: 2;
+}
+
+.arrow_minute > .arrow__inner {
+  --arrow-size: calc((var(--clock-diameter) * 0.8) / 2 - var(--wrapper-width));
+
+  border-left: var(--arrow-minute-size) solid transparent;
+  border-right: var(--arrow-minute-size) solid transparent;
+  margin-bottom: calc(var(--wrapper-width) + (var(--clock-diameter) * 0.2) / 2);
+  border-bottom: var(--arrow-size) solid var(--arrow-minute-color);
+}
+
+.arrow_hour {
+  transform: rotateZ(calc(var(--start-angle) + 180deg));
+  z-index: 1;
+}
+
+.arrow_hour > .arrow__inner {
+  --arrow-size: calc((var(--clock-diameter) * 0.5) / 2 - var(--wrapper-width));
+
+  border-left: var(--arrow-hour-size) solid transparent;
+  border-right: var(--arrow-hour-size) solid transparent;
+  margin-bottom: calc(var(--wrapper-width) + (var(--clock-diameter) * 0.5) / 2);
+  border-bottom: var(--arrow-size) solid var(--arrow-hour-color);
+}
+
+.indicator {
+  position: absolute;
+  --point-angle: 0deg;
+  display: flex;
+  height: var(--clock-diameter);
+  transform: rotate(var(--point-angle));
+
+  .point {
+    background-color: var(--accent-color);
+    width: var(--clock-point-width);
+    height: var(--clock-point-height);
+    aspect-ratio: 1;
+    align-self: flex-start;
+    margin-bottom: var(--clock-point-margin);
+    margin-top: var(--clock-point-margin);
+  }
+
+  .point_small {
+    height: var(--clock-point-small-height);
+    width: var(--clock-point-small-width);
+  }
+}
