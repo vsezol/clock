@@ -2,8 +2,24 @@ const clock = document.querySelector(".clock");
 const secondArrow = document.querySelector(".arrow_second");
 const minuteArrow = document.querySelector(".arrow_minute");
 const hourArrow = document.querySelector(".arrow_hour");
+const soundButton = document.querySelector(".sound-button");
 
-const tick = new Audio("tick.mp3");
+const tickAudio = document.querySelector("#tick-sound");
+const gearsAudio = document.querySelector("#gears-sound");
+
+let isSoundEnabled = false;
+
+soundButton.addEventListener(
+  "click",
+  () => {
+    isSoundEnabled = true;
+    soundButton.remove();
+
+    gearsAudio.volume = 0.2;
+    gearsAudio.play();
+  },
+  { once: true }
+);
 
 for (let i = 0; i < 360; i += 6) {
   const indicator = document.createElement("div");
@@ -36,7 +52,9 @@ function syncClock() {
       return;
     }
 
-    tick.play();
+    if (isSoundEnabled) {
+      tickAudio.play();
+    }
 
     previousTimeParts = timeParts;
 

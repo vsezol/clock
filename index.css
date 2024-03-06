@@ -22,9 +22,14 @@
   --center-top-size: 15px;
 
   --accent-color: rgb(13, 197, 31);
+  --secondary-color: rgb(139, 161, 139);
 
-  --arrow-minute-color: rgb(139, 161, 139);
-  --arrow-hour-color: rgb(139, 161, 139);
+  --arrow-minute-color: var(--secondary-color);
+  --arrow-hour-color: var(--secondary-color);
+
+  --gear-diameter: calc(var(--clock-diameter) / 8);
+
+  font-size: 16px;
 }
 
 @media screen and (max-width: 768px) {
@@ -38,6 +43,8 @@
     --arrow-hour-size: 8px;
 
     --center-top-size: 12px;
+
+    font-size: 12px;
   }
 }
 
@@ -161,7 +168,7 @@ body {
 
 .arrow_minute {
   transform: rotateZ(calc(var(--start-angle) + 180deg));
-  z-index: 2;
+  z-index: 4;
 }
 
 .arrow_minute > .arrow__inner {
@@ -175,7 +182,7 @@ body {
 
 .arrow_hour {
   transform: rotateZ(calc(var(--start-angle) + 180deg));
-  z-index: 1;
+  z-index: 3;
 }
 
 .arrow_hour > .arrow__inner {
@@ -208,4 +215,152 @@ body {
     height: var(--clock-point-small-height);
     width: var(--clock-point-small-width);
   }
+}
+
+.gear {
+  position: absolute;
+  width: var(--gear-diameter);
+  height: var(--gear-diameter);
+  aspect-ratio: 1;
+  background: var(--secondary-color);
+  border-radius: 50%;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.gear__center {
+  position: absolute;
+  transform: translate(50%, 50%);
+  z-index: 10;
+  width: calc(var(--gear-diameter) / 2);
+  height: calc(var(--gear-diameter) / 2);
+  background: var(--bg);
+  border-radius: 50%;
+}
+
+.gear__tooth {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 4px;
+  z-index: 1;
+  width: calc(var(--gear-diameter) / 4.4);
+  height: calc(var(--gear-diameter) * 1.3);
+  background: var(--secondary-color);
+}
+
+.gear__tooth:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gear__tooth:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.gear__tooth:nth-child(4) {
+  transform: translate(-50%, -50%) rotate(135deg);
+}
+
+.gear_top {
+  --gear-translate: translate(-100%, 50%);
+  transform: var(--gear-translate);
+  animation-name: spin-gear-top;
+}
+
+.gear_bottom {
+  --gear-translate: translate(-182%, 132%);
+  transform: var(--gear-translate);
+  animation-name: spin-gear-bottom;
+}
+
+@keyframes spin-gear-top {
+  from {
+    transform: var(--gear-translate) rotate(360deg);
+  }
+  to {
+    transform: var(--gear-translate) rotate(0deg);
+  }
+}
+
+@keyframes spin-gear-bottom {
+  from {
+    transform: var(--gear-translate) rotate(22.5deg);
+  }
+  to {
+    transform: var(--gear-translate) rotate(calc(360deg + 22.5deg));
+  }
+}
+
+.gear-cap {
+  position: relative;
+  width: calc(var(--gear-diameter) * 2.6);
+  height: calc(var(--gear-diameter) * 2.6);
+  box-sizing: border-box;
+  aspect-ratio: 1;
+  border: calc(var(--gear-diameter) / 1.6) var(--bg) solid;
+  border-radius: 100%;
+  background-color: transparent;
+  transform: translate(-53%, 34.5%);
+  z-index: 2;
+  box-shadow: inset -2px -2px 2px var(--shadow-1),
+    inset 2px 2px 2px var(--shadow-2);
+}
+
+.glass {
+  position: absolute;
+  width: calc(var(--clock-diameter) - var(--wrapper-width) * 2);
+  height: calc(var(--clock-diameter) - var(--wrapper-width) * 2);
+  border-radius: 50%;
+  background: rgba(255, 243, 243, 0.03);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.glass__label {
+  display: block;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  cursor: pointer;
+
+  font-family: "Anta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+
+  user-select: none;
+  text-decoration: none;
+}
+
+.sound-button {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Anta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  border: none;
+  outline: none;
+  background: var(--bg);
+  color: var(--accent-color);
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  padding: 0.8rem;
+  box-shadow: -5px -5px 9px var(--shadow-1), 3px 3px 2px var(--shadow-3);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: 0.2s;
+  border-radius: 4px;
+}
+
+.sound-button:hover {
+  border: 1px solid var(--accent-color);
 }

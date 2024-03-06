@@ -5,10 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clock</title>
     <link rel="stylesheet" href="./index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anta&display=swap"
+      rel="stylesheet"
+    />
     <script src="./index.js" defer></script>
   </head>
   <body>
     <div class="clock">
+      <div class="gear-cap"></div>
+
+      <div class="gear gear_top">
+        <div class="gear__center"></div>
+        <div class="gear__tooth"></div>
+        <div class="gear__tooth"></div>
+        <div class="gear__tooth"></div>
+        <div class="gear__tooth"></div>
+      </div>
+
+      <div class="gear gear_bottom">
+        <div class="gear__center"></div>
+        <div class="gear__tooth"></div>
+        <div class="gear__tooth"></div>
+        <div class="gear__tooth"></div>
+        <div class="gear__tooth"></div>
+      </div>
+
+      <div class="glass">
+        <a class="glass__label" href="https://vsezol.com">vsezol</a>
+      </div>
+
       <div class="center-top"></div>
 
       <div class="center center_second"></div>
@@ -25,5 +53,10 @@
         <div class="arrow__inner"></div>
       </div>
     </div>
+
+    <button class="sound-button">enable sound</button>
+
+    <audio id="tick-sound" src="tick.mp3"></audio>
+    <audio id="gears-sound" autoplay loop src="gears.mp3"></audio>
   </body>
 </html>
