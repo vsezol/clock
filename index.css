@@ -308,21 +308,10 @@ body {
     inset 2px 2px 2px var(--shadow-2);
 }
 
-.glass {
-  position: absolute;
-  width: calc(var(--clock-diameter) - var(--wrapper-width) * 2);
-  height: calc(var(--clock-diameter) - var(--wrapper-width) * 2);
-  border-radius: 50%;
-  background: rgba(255, 243, 243, 0.03);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-.glass__label {
+.label {
   display: block;
   position: absolute;
-  top: 90%;
+  top: 81%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: var(--secondary-color);
@@ -336,6 +325,16 @@ body {
 
   user-select: none;
   text-decoration: none;
+  z-index: 1;
+  animation: blinker 1s linear;
+  animation-iteration-count: 3;
+  animation-delay: 3s;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .sound-button {

@@ -4,18 +4,12 @@ const minuteArrow = document.querySelector(".arrow_minute");
 const hourArrow = document.querySelector(".arrow_hour");
 const soundButton = document.querySelector(".sound-button");
 
-const tickAudio = document.querySelector("#tick-sound");
 const gearsAudio = document.querySelector("#gears-sound");
-
-let isSoundEnabled = false;
 
 soundButton.addEventListener(
   "click",
   () => {
-    isSoundEnabled = true;
     soundButton.remove();
-
-    gearsAudio.volume = 0.2;
     gearsAudio.play();
   },
   { once: true }
@@ -50,10 +44,6 @@ function syncClock() {
     if (timePartsDiff.every((x) => x === 0)) {
       syncClock();
       return;
-    }
-
-    if (isSoundEnabled) {
-      tickAudio.play();
     }
 
     previousTimeParts = timeParts;
