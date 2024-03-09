@@ -3,73 +3,46 @@ const secondArrow = document.querySelector(".arrow_second");
 const minuteArrow = document.querySelector(".arrow_minute");
 const hourArrow = document.querySelector(".arrow_hour");
 const soundButton = document.querySelector(".sound-button");
-
 const gearsAudio = document.querySelector("#gears-sound");
 
-soundButton.addEventListener(
-  "click",
-  () => {
-    soundButton.remove();
-    gearsAudio.play();
-  },
-  { once: true }
-);
+createIndicators();
 
-for (let i = 0; i < 360; i += 6) {
-  const indicator = document.createElement("div");
-  indicator.classList.add("indicator");
-  indicator.style.setProperty("--point-angle", `${i}deg`);
-
-  const point = document.createElement("div");
-  point.classList.add("point");
-
-  if (i % 30 !== 0) {
-    point.classList.add("point_small");
-  }
-
-  indicator.appendChild(point);
-
-  clock.append(indicator);
-}
-
-setAngleVariables(getAngles(getTimeParts()));
+soundButton.addEventListener("click", enableSound, { once: true });
 
 let previousTimeParts = getTimeParts();
+
+setAngleVariables(getAngles(previousTimeParts));
+
+syncClock();
 
 function syncClock() {
   requestAnimationFrame(() => {
     const timeParts = getTimeParts();
-    const timePartsDiff = getTimePartsDiff(previousTimeParts);
+    const timePartsDiff = getTimePartsDiff(previousTimeParts, timeParts);
 
     if (timePartsDiff.every((x) => x === 0)) {
       syncClock();
+
       return;
     }
 
     previousTimeParts = timeParts;
 
-    const newAngles = getUpdatedAngles(timePartsDiff);
-    setAngleVariables(newAngles);
+    const anglesDiff = getAngles(timePartsDiff);
+    const updatedAngles = getAngleVariables().map((x, i) => x + anglesDiff[i]);
+
+    setAngleVariables(updatedAngles);
 
     syncClock();
   });
 }
 
-syncClock();
-
-function getUpdatedAngles(timePartsDiff) {
-  const anglesDiff = getAngles(timePartsDiff);
-  const styleAngles = getAngleVariables();
-
-  return styleAngles.map((x, i) => x + anglesDiff[i]);
-}
-
 function getAngleVariables() {
-  return [
-    secondArrow.style.getPropertyValue("--start-angle"),
-    minuteArrow.style.getPropertyValue("--start-angle"),
-    hourArrow.style.getPropertyValue("--start-angle"),
-  ].map((x) => Number(x.replaceAll("deg", "")));
+  return [secondArrow, minuteArrow, hourArrow]
+    .map((el) =>
+      el.style.getPropertyValue("--start-angle").replaceAll("deg", "")
+    )
+    .map(Number);
 }
 
 function setAngleVariables([seconds, minutes, hours]) {
@@ -78,9 +51,7 @@ function setAngleVariables([seconds, minutes, hours]) {
   hourArrow.style.setProperty("--start-angle", `${hours}deg`);
 }
 
-function getTimePartsDiff(previous) {
-  const current = getTimeParts();
-
+function getTimePartsDiff(previous, current) {
   let secondsDiff = Math.abs(current[0] - previous[0]);
   secondsDiff = secondsDiff >= 59 ? 1 : secondsDiff;
 
@@ -95,6 +66,7 @@ function getTimePartsDiff(previous) {
 
 function getTimeParts() {
   const date = new Date();
+
   return [date.getSeconds(), date.getMinutes(), date.getHours()];
 }
 
@@ -104,4 +76,29 @@ function getAngles(timeParts) {
   const hourAngle = (timeParts[2] / 12) * 360;
 
   return [secondsAngle, minutesAngle, hourAngle];
+}
+
+function enableSound() {
+  soundButton.remove();
+  gearsAudio.play();
+}
+
+function createIndicators() {
+  const step = 6;
+
+  for (let i = 0; i < 360; i += step) {
+    const point = document.createElement("div");
+    point.classList.add("point");
+    if (i % 30 !== 0) {
+      point.classList.add("point_small");
+    }
+
+    const indicator = document.createElement("div");
+    indicator.classList.add("indicator");
+    indicator.style.setProperty("--point-angle", `${i}deg`);
+
+    indicator.append(point);
+
+    clock.append(indicator);
+  }
 }
